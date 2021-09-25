@@ -12,5 +12,5 @@ callback app = do
 main : IO ()
 main = do
     app <- application_new "me.dannypsnl.hello" G_Application_Flags_None
-    signal_connect app "activate" callback 0 0
+    signal_connect app "activate" callback
     run_application app
