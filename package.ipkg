@@ -11,4 +11,4 @@ sourcedir = "src"
 builddir = "build"
 outputdir = "bin"
 
-modules = Gtk
+modules = Gtk3

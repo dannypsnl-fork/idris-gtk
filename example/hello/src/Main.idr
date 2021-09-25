@@ -1,6 +1,6 @@
 module Main
 
-import Gtk
+import Gtk3
 
 main : IO ()
 main = do
