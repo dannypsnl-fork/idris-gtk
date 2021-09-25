@@ -1,11 +1,11 @@
-package idris-project
+package idris-gtk
 
 readme = "README.md"
 version = "v0.0.0"
 license = "MIT"
 authors = "Lîm Tsú-thuàn"
 maintainers = "Lîm Tsú-thuàn"
-homepage = "https://github.com/dannypsnl/idris-project"
+homepage = "https://github.com/dannypsnl/idris-gtk"
 
 sourcedir = "src"
 builddir = "build"
