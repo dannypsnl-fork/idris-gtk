@@ -1,7 +1,7 @@
 module Gtk
 
 libgtk4 : String -> String
-libgtk4 fn = "C:" ++ fn ++ ",libgtk-4"
+libgtk4 fn = "C:" ++ fn ++ ",libgtk-3"
 
 %foreign libgtk4 "gtk_application_new"
 export gtk_application_new : String -> Int -> PrimIO AnyPtr
