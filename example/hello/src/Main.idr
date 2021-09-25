@@ -11,6 +11,9 @@ callback app = do
     label <- new_label "Hello World"
     set_parent label window
 
+    btn <- new_button "Click me"
+    set_parent btn window
+
     window_present window
 
 main : IO ()

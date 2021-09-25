@@ -17,6 +17,10 @@ export
 data Label = LabelWrapper AnyPtr
 export
 Widget Label where get (LabelWrapper a) = a
+export 
+data Button = ButtonWrapper AnyPtr
+export
+Widget Button where get (ButtonWrapper a) = a
 
 %foreign libgtk3 "gtk_application_new"
 gtk_application_new : String -> Int -> PrimIO AnyPtr
@@ -66,6 +70,12 @@ signal_connect : HasIO io => App -> String -> (callback : App -> IO ()) -> io ()
 signal_connect (AppWrapper app) method callback =
     primIO $ prim__g_signal_connect_object app method (\app => toPrim $ callback (AppWrapper app)) 0 0
 
+%foreign libgtk3 "gtk_widget_set_parent"
+gtk_widget_set_parent : AnyPtr -> AnyPtr -> PrimIO ()
+export
+set_parent : Widget a => Widget parent => a -> parent -> IO ()
+set_parent a parent = primIO $ gtk_widget_set_parent (get a) (get parent)
+
 %foreign libgtk3 "gtk_label_new"
 gtk_label_new : String -> PrimIO AnyPtr
 export
@@ -74,11 +84,13 @@ new_label label = do
     label <- primIO $ gtk_label_new label
     pure $ LabelWrapper label
 
-%foreign libgtk3 "gtk_widget_set_parent"
-gtk_widget_set_parent : AnyPtr -> AnyPtr -> PrimIO ()
+%foreign libgtk3 "gtk_button_new_with_label"
+gtk_button_new_with_label : String -> PrimIO AnyPtr
 export
-set_parent : Widget a => Widget parent => a -> parent -> IO ()
-set_parent a parent = primIO $ gtk_widget_set_parent (get a) (get parent)
+new_button : HasIO io => String -> io Button
+new_button label = do
+    btn <- primIO $ gtk_button_new_with_label label
+    pure $ ButtonWrapper btn
 
 export
 G_Application_Flags_None : Int
