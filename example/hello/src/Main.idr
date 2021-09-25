@@ -7,6 +7,10 @@ callback app = do
     window <- application_window_new app
     window_set_title window "Window"
     window_set_default_size window 200 200
+
+    label <- new_label "Hello World"
+    set_parent label window
+
     window_present window
 
 main : IO ()

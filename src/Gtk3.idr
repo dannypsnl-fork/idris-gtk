@@ -5,12 +5,21 @@ libgtk3 fn = "C:" ++ fn ++ ",libgtk-3"
 
 export 
 data App = AppWrapper AnyPtr
+
+interface Widget a where
+    get : a -> AnyPtr
+
 export
 data Window = WindowWrapper AnyPtr
+export
+Widget Window where get (WindowWrapper a) = a
+export 
+data Label = LabelWrapper AnyPtr
+export
+Widget Label where get (LabelWrapper a) = a
 
 %foreign libgtk3 "gtk_application_new"
 gtk_application_new : String -> Int -> PrimIO AnyPtr
-
 export
 application_new : HasIO io => String -> Int -> io App
 application_new id flag = do
@@ -19,7 +28,6 @@ application_new id flag = do
 
 %foreign libgtk3 "gtk_application_window_new"
 gtk_application_window_new : AnyPtr -> PrimIO AnyPtr
-
 export
 application_window_new : HasIO io => App -> io Window
 application_window_new (AppWrapper app) = do
@@ -28,31 +36,24 @@ application_window_new (AppWrapper app) = do
 
 %foreign libgtk3 "gtk_window_set_title"
 gtk_window_set_title : AnyPtr -> String -> PrimIO ()
-
 export
 window_set_title : HasIO io => Window -> String -> io ()
 window_set_title (WindowWrapper window) name = primIO $ gtk_window_set_title window name
 
 %foreign libgtk3 "gtk_window_set_default_size"
 gtk_window_set_default_size : AnyPtr -> Int -> Int -> PrimIO ()
-
 export
 window_set_default_size : HasIO io => Window -> Int -> Int -> io ()
 window_set_default_size (WindowWrapper window) x y = primIO $ gtk_window_set_default_size window x y
 
 %foreign libgtk3 "gtk_window_present"
 gtk_window_present : AnyPtr -> PrimIO ()
-
 export
 window_present : HasIO io => Window -> io ()
 window_present (WindowWrapper window) = primIO $ gtk_window_present window
 
-%foreign libgtk3 "gtk_widget_show"
-gtk_widget_show : AnyPtr -> PrimIO ()
-
 %foreign libgtk3 "g_application_run"
 g_application_run : AnyPtr -> Int -> Int -> PrimIO ()
-
 export
 run_application : HasIO io => App -> io ()
 run_application (AppWrapper app) = do
@@ -60,11 +61,24 @@ run_application (AppWrapper app) = do
 
 %foreign libgtk3 "g_signal_connect_object"
 prim__g_signal_connect_object : AnyPtr -> String -> (callback : AnyPtr -> PrimIO ()) -> Int -> Int -> PrimIO ()
-
 export
 signal_connect : HasIO io => App -> String -> (callback : App -> IO ()) -> io ()
 signal_connect (AppWrapper app) method callback =
     primIO $ prim__g_signal_connect_object app method (\app => toPrim $ callback (AppWrapper app)) 0 0
+
+%foreign libgtk3 "gtk_label_new"
+gtk_label_new : String -> PrimIO AnyPtr
+export
+new_label : HasIO io => String -> io Label
+new_label label = do
+    label <- primIO $ gtk_label_new label
+    pure $ LabelWrapper label
+
+%foreign libgtk3 "gtk_widget_set_parent"
+gtk_widget_set_parent : AnyPtr -> AnyPtr -> PrimIO ()
+export
+set_parent : Widget a => Widget parent => a -> parent -> IO ()
+set_parent a parent = primIO $ gtk_widget_set_parent (get a) (get parent)
 
 export
 G_Application_Flags_None : Int
