@@ -18,5 +18,13 @@ export gtk_window_set_default_size : AnyPtr -> Int -> Int -> PrimIO ()
 %foreign libgtk3 "gtk_widget_show"
 export gtk_widget_show : AnyPtr -> PrimIO ()
 
-export G_Application_Flags_None : Int
+%foreign libgtk3 "g_signal_connect"
+prim__g_signal_connect : AnyPtr -> String -> (callback : AnyPtr -> PrimIO ()) -> Int -> PrimIO ()
+
+export
+g_signal_connect : AnyPtr -> String -> (callback : AnyPtr -> IO ()) -> Int -> IO ()
+g_signal_connect app method callback i = primIO $ prim__g_signal_connect app method (\app=>toPrim $ callback app) i
+
+export
+G_Application_Flags_None : Int
 G_Application_Flags_None = 0
