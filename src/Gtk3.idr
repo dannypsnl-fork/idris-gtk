@@ -62,8 +62,8 @@ run_application (AppWrapper app) = do
 prim__g_signal_connect_object : AnyPtr -> String -> (callback : AnyPtr -> PrimIO ()) -> Int -> Int -> PrimIO ()
 
 export
-g_signal_connect : HasIO io => App -> String -> (callback : App -> IO ()) -> Int -> Int -> io ()
-g_signal_connect (AppWrapper app) method callback o i =
+signal_connect : HasIO io => App -> String -> (callback : App -> IO ()) -> Int -> Int -> io ()
+signal_connect (AppWrapper app) method callback o i =
     primIO $ prim__g_signal_connect_object app method (\app => toPrim $ callback (AppWrapper app)) o i
 
 export
