@@ -6,6 +6,9 @@ libgtk3 fn = "C:" ++ fn ++ ",libgtk-3"
 %foreign libgtk3 "gtk_application_new"
 export gtk_application_new : String -> Int -> PrimIO AnyPtr
 
+%foreign libgtk3 "gtk_application_window_new"
+export gtk_application_window_new : AnyPtr -> PrimIO AnyPtr
+
 %foreign libgtk3 "gtk_window_set_title"
 export gtk_window_set_title : AnyPtr -> String -> PrimIO ()
 
@@ -14,3 +17,6 @@ export gtk_window_set_default_size : AnyPtr -> Int -> Int -> PrimIO ()
 
 %foreign libgtk3 "gtk_widget_show"
 export gtk_widget_show : AnyPtr -> PrimIO ()
+
+export G_Application_Flags_None : Int
+G_Application_Flags_None = 0
