@@ -8,11 +8,14 @@ callback app = do
     window_set_title window "Window"
     window_set_default_size window 200 200
 
+    pane <- new_paned Horizontal
+    set_parent pane window
+
     label <- new_label "Hello World"
-    set_parent label window
+    paned_add pane label
 
     btn <- new_button "Click me"
-    set_parent btn window
+    paned_add pane btn
 
     window_present window
 

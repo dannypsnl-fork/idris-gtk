@@ -6,6 +6,9 @@ libgtk3 fn = "C:" ++ fn ++ ",libgtk-3"
 export 
 data App = AppWrapper AnyPtr
 
+public export
+data Orientation = Horizontal | Vertical
+
 interface Widget a where
     get : a -> AnyPtr
 
@@ -21,6 +24,10 @@ export
 data Button = ButtonWrapper AnyPtr
 export
 Widget Button where get (ButtonWrapper a) = a
+export
+data Paned = PanedWrapper AnyPtr
+export
+Widget Paned where get (PanedWrapper a) = a
 
 %foreign libgtk3 "gtk_application_new"
 gtk_application_new : String -> Int -> PrimIO AnyPtr
@@ -75,6 +82,23 @@ gtk_widget_set_parent : AnyPtr -> AnyPtr -> PrimIO ()
 export
 set_parent : Widget a => Widget parent => a -> parent -> IO ()
 set_parent a parent = primIO $ gtk_widget_set_parent (get a) (get parent)
+
+%foreign libgtk3 "gtk_paned_new"
+gtk_paned_new : Int -> PrimIO AnyPtr
+export
+new_paned : HasIO io => Orientation -> io Paned
+new_paned Horizontal = do
+    p <- primIO $ gtk_paned_new 0
+    pure $ PanedWrapper p
+new_paned Vertical = do
+    p <- primIO $ gtk_paned_new 1
+    pure $ PanedWrapper p
+
+%foreign libgtk3 "gtk_container_add"
+gtk_container_add : AnyPtr -> AnyPtr -> PrimIO ()
+export
+paned_add : HasIO io => Widget a => Paned -> a -> io ()
+paned_add (PanedWrapper p) widget = primIO $ gtk_container_add p (get widget)
 
 %foreign libgtk3 "gtk_label_new"
 gtk_label_new : String -> PrimIO AnyPtr
