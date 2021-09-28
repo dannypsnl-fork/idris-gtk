@@ -1,5 +1,7 @@
 module Gtk3
 
+import public Gtk3.Const
+
 libgtk3 : String -> String
 libgtk3 fn = "C:" ++ fn ++ ",libgtk-3"
 
@@ -115,7 +117,3 @@ new_button : HasIO io => String -> io Button
 new_button label = do
     btn <- primIO $ gtk_button_new_with_label label
     pure $ ButtonWrapper btn
-
-export
-G_Application_Flags_None : Int
-G_Application_Flags_None = 0

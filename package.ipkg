@@ -11,4 +11,5 @@ sourcedir = "src"
 builddir = "build"
 outputdir = "bin"
 
-modules = Gtk3
+modules = Gtk3,
+          Gtk3.Const
