@@ -5,7 +5,7 @@ build:
 	@idris2 --build ./package.ipkg
 
 run: build
-	@./bin/hello
+	@./build/exec/hello
 
 clean:
 	@idris2 --clean ./package.ipkg
