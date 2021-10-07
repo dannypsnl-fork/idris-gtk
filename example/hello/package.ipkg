@@ -8,8 +8,6 @@ maintainers = "Lîm Tsú-thuàn"
 homepage = "https://github.com/dannypsnl/idris-gtk"
 
 sourcedir = "src"
-builddir = "build"
-outputdir = "bin"
 
 executable = hello
 main = Main
